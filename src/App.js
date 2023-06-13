@@ -2,13 +2,14 @@ import './App.css';
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import Numbers from './components/Numbers';
+import SearchIcon from '@mui/icons-material/Search';
+import ContactPhoneIcon from '@mui/icons-material/ContactPhone';
 import NameForm from './components/NameForm';
 import FilterNames from './components/Filter';
 import dataServices from './services/Data'
 
 
 function App() {
-
 
     const [ persons, setPersons ] = useState([])
     const [ filtered, setFiltered ] = useState('') 
@@ -73,21 +74,31 @@ function App() {
 
     
   return (
-    <div className="App bg-zinc-400 h-[100vh] flex flex-col  gap-4 items-center">
-      <h1>PhoneBook</h1>
-      <FilterNames
-        filterChange={filterContacts}
-      />
-      <h4 className={error ? 'bg-red-700 font-bold text-md p-3 text-white rounded' : "bg-green-500 font-bold text-md text-white rounded p-2"}>{!error ? "Add New Name" : error }</h4>
-      <NameForm 
-        addName={addNewNumber} 
-        trackName={(e) => setNewName(e.target.value)} 
-        trackNum={(e) => setNewNumber(e.target.value)}
-        nameVal={newName}
-        numVal={newNumber}
-      />
-      <Numbers people={persons} deleteNumber={deleteNumber}/>
-    </div>  
+    <section class="  bg-slate-700 flex justify-center h-[100vh] border-4 border-gray-500">
+      <div className="App flex flex-col  gap-4 items-center w-[40%] border-2 border-gray-500 rounded-4xl">
+        <div class="flex items-center text-white font-bold text-2xl gap-3">
+          <ContactPhoneIcon/>
+          <h1>PhoneBook</h1>
+        </div>
+        <div className='flex items-center justify-between mx-auto w-[100%]'>
+          <h1 className='font-bold text-2xl text-white'>Contacts</h1>
+          <button className='p-[.5rem] bg-blue-700 text-white rounded-lg'>+ Add Contact</button>
+        </div>
+          <label className='flex items-center bg-white w-[100%] p-2 rounded-xl'>
+            <SearchIcon/>
+            <input placeholder='Search for contact by last name' className='w-full'/>
+          </label>
+        {/* <h4 className={error ? 'bg-red-700 font-bold text-md p-3 text-white rounded' : "bg-green-500 font-bold text-md text-white rounded p-2"}>{!error ? "Add New Name" : error }</h4> */}
+        {/* <NameForm
+          addName={addNewNumber}
+          trackName={(e) => setNewName(e.target.value)}
+          trackNum={(e) => setNewNumber(e.target.value)}
+          nameVal={newName}
+          numVal={newNumber}
+        /> */}
+        <Numbers people={persons} deleteNumber={deleteNumber}/>
+      </div>
+    </section>
   );
 }
 

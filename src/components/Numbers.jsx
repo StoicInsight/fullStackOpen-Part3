@@ -1,16 +1,18 @@
 import React from 'react'
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const Numbers = ({people, deleteNumber}) => {
       console.log('people from numbers', people)
 
   return (
-    <div className='flex flex-col items-center bg-white w-max p-10 rounded-lg'>
-      <h2 className='p-5 '>Numbers</h2>
+    <div className='flex flex-col items-center bg-white rounded-lg w-full'>
       {people.map((person, id) => {
         return (
-          <div className="flex items-stretch gap-10" key={id}>
+          <div className="flex items-center justify-between w-full py-4 mx-10 border-y-[1px] border-grey" key={id}>
             <p className='text-2xl font-bold'>{person ? person.name : 'no people'}</p>
-            <button className="bg-red-600 p-1 rounded-md" onClick={() => deleteNumber(person.id)}>Delete</button>
+            <button className="bg-red-600 p-1 rounded-md text-white" onClick={() => deleteNumber(person.id)}>
+              <DeleteIcon/>
+            </button>
           </div>
         )
       })}
