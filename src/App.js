@@ -50,11 +50,11 @@ function App() {
         .then(data => setPersons(data))
     }, [App])
 
+    console.log(persons)
+
 
     const addNewNumber = (e) => {
       e.preventDefault()
-
-      console.log(e)
 
       const nameObject = {
         name: newName,
