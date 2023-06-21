@@ -1,9 +1,11 @@
 require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
+const morgan = require('morgan')
 const Contact = require('./models/contact')
 const app = express()
 app.use(express.json())
+app.use(morgan('dev'))
 app.use(cors())
 const port = process.env.PORT 
 
@@ -31,7 +33,6 @@ const port = process.env.PORT
 // ]
 
 
-
 // const num = contacts.length
 
 app.get('/', (req, res) => {
@@ -57,6 +58,7 @@ app.post('/contacts', (req, res) => {
   // console.log("response", req)
   // //  contacts.push(contact)
   // res.json(contact)
+  console.log('Request body',req.body)
   const body = req.body
 
   if(body.content === null) {
@@ -65,7 +67,7 @@ app.post('/contacts', (req, res) => {
 
   const contact = new Contact({
     name: body.name,
-    phone: body.number,
+    phone: body.phone,
     important: body.important || false
   })
 
@@ -76,10 +78,10 @@ app.post('/contacts', (req, res) => {
 })
 
 // Fetch contact info
-app.get('/contacts/info', (req, res) => {
-  const date = new Date()
-  res.send(`<h1>There are ${num} contacts <br/> ${date} <h1/>`)
-})
+// app.get('/contacts/info', (req, res) => {
+//   const date = new Date()
+//   res.send(`<h1>There are ${num} contacts <br/> ${date} <h1/>`)
+// })
 
 // Delete contact 
 app.delete('/contacts/:id', (req, res) => {
