@@ -16,7 +16,7 @@ const NameForm = ({ trackName, addName, trackNum, nameVal, numVal, closeModal })
           </div>
    
           <div className="flex items-center font-bold text-lg gap-5 p-3">
-            <PhoneInput country="US" value={numVal()} onChange={trackNum()} />
+            {/* <PhoneInput country="US" value={numVal} onChange={trackNum()} /> */}
             <input
               country="US"
               className='bg-gray-300 p-2 rounded-md w-full'

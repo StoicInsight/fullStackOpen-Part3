@@ -1,6 +1,6 @@
 import axios  from 'axios'
 
-const URL = "http://localhost:3002/contacts"
+const URL = "http://localhost:8080/contacts"
 
 const getNumbers = () => {
   const request = axios.get(URL)
@@ -14,7 +14,7 @@ const newNumber = newNum => {
 
 const deleteNumber = (id, number) => {
   const phoneUrl = `${URL}/${id}`
-  const request = axios.delete(phoneUrl, number)
+  const request = axios.delete(phoneUrl)
 
   return request.then(response => response.data)
 }

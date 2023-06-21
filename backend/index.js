@@ -85,14 +85,17 @@ app.post('/contacts', (req, res) => {
 
 // Delete contact 
 app.delete('/contacts/:id', (req, res) => {
-  const id = Number(req.params.id)
-  console.log(id)
-  const contact = contacts.filter(note => note.id !== id)
-  console.log(contact)
+  // const id = Number(req.params.id)
+  // console.log(id)
+  // const contact = contacts.filter(note => note.id !== id)
+  // console.log(contact)
 
-  contact 
-    ? res.json(contact)
-    : res.status(404).end()
+  // contact 
+  //   ? res.json(contact)
+  //   : res.status(404).end()
+  Contact.deleteOne({id: req.body.id}).then(res => {
+    console.log('Deleted contact', res.json())
+  })
 })
 
 // Fetch single contact
