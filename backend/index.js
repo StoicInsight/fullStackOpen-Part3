@@ -1,59 +1,38 @@
 require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
-const mongoose = require('mongoose')
+const Contact = require('./models/contact')
 const app = express()
 app.use(express.json())
 app.use(cors())
 const port = process.env.PORT 
 
-const contacts = [
-  { 
-    "id": 1,
-    "name": "Arto Hellas", 
-    "number": "040-123456"
-  },
-  { 
-    "id": 2,
-    "name": "Ada Lovelace", 
-    "number": "39-44-5323523"
-  },
-  { 
-    "id": 3,
-    "name": "Dan Abramov", 
-    "number": "12-43-234345"
-  },
-  { 
-    "id": 4,
-    "name": "Mary Poppendieck", 
-    "number": "39-23-6423122"
-  }
-]
+// const contacts = [
+//   { 
+//     "id": 1,
+//     "name": "Arto Hellas", 
+//     "number": "040-123456"
+//   },
+//   { 
+//     "id": 2,
+//     "name": "Ada Lovelace", 
+//     "number": "39-44-5323523"
+//   },
+//   { 
+//     "id": 3,
+//     "name": "Dan Abramov", 
+//     "number": "12-43-234345"
+//   },
+//   { 
+//     "id": 4,
+//     "name": "Mary Poppendieck", 
+//     "number": "39-23-6423122"
+//   }
+// ]
 
 
-const url = `mongodb+srv://pierre:wildones@phonebook.lo9oyjk.mongodb.net/?retryWrites=true&w=majority`
 
-mongoose.set('strictQuery', false)
-mongoose.connect(url)
-
-const contactSchema = new mongoose.Schema({
-  name: String,
-  phone: Number,
-  important: Boolean
-})
-
-contactSchema.set('toJSON', {
-  transform: (document, returnedObject) => {
-    returnedObject.id = returnedObject._id.toString()
-    delete returnedObject._id
-    delete returnedObject.__v
-  }
-})
-
-const Contact = mongoose.model('Contacts', contactSchema)
-
-
-const num = contacts.length
+// const num = contacts.length
 
 app.get('/', (req, res) => {
   res.send('Hello from express')
@@ -68,16 +47,31 @@ app.get('/contacts', (req, res) => {
 
 // Post contact
 app.post('/contacts', (req, res) => {
-  const max = Math.max(contacts.map(contact => contact.id)) 
-  const contact = {
-    id: contacts.length += 1,
-    name: req.body.name,
-    number: req.body.number
+  // const max = Math.max(contacts.map(contact => contact.id)) 
+  // const contact = {
+  //   id: contacts.length += 1,
+  //   name: req.body.name,
+  //   number: req.body.number
+  // }
+
+  // console.log("response", req)
+  // //  contacts.push(contact)
+  // res.json(contact)
+  const body = req.body
+
+  if(body.content === null) {
+    return res.status(404).json({ error: 'content missing'})
   }
 
-  console.log("response", req)
-  //  contacts.push(contact)
-  res.json(contact)
+  const contact = new Contact({
+    name: body.name,
+    phone: body.number,
+    important: body.important || false
+  })
+
+  contact.save().then(phone => {
+    res.json(phone)
+  })
   
 })
 
@@ -101,9 +95,12 @@ app.delete('/contacts/:id', (req, res) => {
 
 // Fetch single contact
 app.get('/contacts/:id', (req, res) => {
-  const id = Number(req.params.id)
-  const contact = contacts.find(contact => contact.id === id)
-  res.json(contact)
+  // const id = Number(req.params.id)
+  // const contact = contacts.find(contact => contact.id === id)
+  // res.json(contact)
+  Contact.find(req.params.id).then(contact => {
+    res.json(contact)
+  })
 })
 
 
