@@ -1,10 +1,11 @@
 require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
+const mongoose = require('mongoose')
 const app = express()
 app.use(express.json())
 app.use(cors())
-const port = process.env.PORT || 3002
+const port = process.env.PORT 
 
 const contacts = [
   { 
@@ -29,6 +30,29 @@ const contacts = [
   }
 ]
 
+
+const url = `mongodb+srv://pierre:wildones@phonebook.lo9oyjk.mongodb.net/?retryWrites=true&w=majority`
+
+mongoose.set('strictQuery', false)
+mongoose.connect(url)
+
+const contactSchema = new mongoose.Schema({
+  name: String,
+  phone: Number,
+  important: Boolean
+})
+
+contactSchema.set('toJSON', {
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id.toString()
+    delete returnedObject._id
+    delete returnedObject.__v
+  }
+})
+
+const Contact = mongoose.model('Contacts', contactSchema)
+
+
 const num = contacts.length
 
 app.get('/', (req, res) => {
@@ -37,7 +61,9 @@ app.get('/', (req, res) => {
 
 // Fetch all contacts
 app.get('/contacts', (req, res) => {
-  res.json(contacts)
+  Contact.find({}).then(contact => {
+    res.json(contact)
+  })
 })
 
 // Post contact
