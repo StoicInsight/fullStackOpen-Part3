@@ -4,9 +4,9 @@ const cors = require('cors')
 const morgan = require('morgan')
 const Contact = require('./models/contact')
 const app = express()
+app.use(cors())
 app.use(express.json())
 app.use(morgan('dev'))
-app.use(cors())
 const port = process.env.PORT 
 
 // const contacts = [
@@ -93,8 +93,9 @@ app.delete('/contacts/:id', (req, res) => {
   // contact 
   //   ? res.json(contact)
   //   : res.status(404).end()
+  console.log("request", req)
   Contact.deleteOne({id: req.body.id}).then(res => {
-    console.log('Deleted contact', res.json())
+    console.log('Deleted contact', res.json(res))
   })
 })
 
@@ -103,8 +104,15 @@ app.get('/contacts/:id', (req, res) => {
   // const id = Number(req.params.id)
   // const contact = contacts.find(contact => contact.id === id)
   // res.json(contact)
-  Contact.find(req.params.id).then(contact => {
-    res.json(contact)
+  Contact.findById(req.params.id)
+  .then(contact => {
+    contact 
+      ? res.json(contact)
+      : res.status(404).end()
+  })
+  .catch(error => {
+    console.log(error.message)
+    res.status(400).send({ error: 'malformatted id'})
   })
 })
 

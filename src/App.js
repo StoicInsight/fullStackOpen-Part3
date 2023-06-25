@@ -40,6 +40,8 @@ const App = () => {
     const handleOpen = () => setOpen(true)
     const handleClose = () => setOpen(false)
 
+    console.log('Contacts', persons)
+
     useEffect(() => {
       dataServices
         .getNumbers()
@@ -132,7 +134,7 @@ const App = () => {
         nameVal={newName}
         numVal={newNumber}
         />  */}
-         {/* <Numbers people={persons} deleteNumber={deleteNumber}/> */}
+         <Numbers people={persons} deleteNumber={deleteNumber}/>
       </div> 
     </section>
   )
