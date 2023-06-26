@@ -3,37 +3,31 @@ const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan')
 const Contact = require('./models/contact')
+const { NextPlan } = require('@mui/icons-material')
 const app = express()
 app.use(cors())
 app.use(express.json())
 app.use(morgan('dev'))
 const port = process.env.PORT 
 
-// const contacts = [
-//   { 
-//     "id": 1,
-//     "name": "Arto Hellas", 
-//     "number": "040-123456"
-//   },
-//   { 
-//     "id": 2,
-//     "name": "Ada Lovelace", 
-//     "number": "39-44-5323523"
-//   },
-//   { 
-//     "id": 3,
-//     "name": "Dan Abramov", 
-//     "number": "12-43-234345"
-//   },
-//   { 
-//     "id": 4,
-//     "name": "Mary Poppendieck", 
-//     "number": "39-23-6423122"
-//   }
-// ]
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: "unknow endpoint"})
+}
+
+app.use(unknownEndpoint)
+
+const errorHandler = (error, request, response, next) => {
+  console.log(error.message)
+
+  if(error.name === 'CastError') {
+    return response.status(400).send({ error: "malformatted id"})
+  }
+  next(error)
+}
+
+app.use(errorHandler)
 
 
-// const num = contacts.length
 
 app.get('/', (req, res) => {
   res.send('Hello from express')
@@ -110,10 +104,7 @@ app.get('/contacts/:id', (req, res) => {
       ? res.json(contact)
       : res.status(404).end()
   })
-  .catch(error => {
-    console.log(error.message)
-    res.status(400).send({ error: 'malformatted id'})
-  })
+  .catch(error => next(error))
 })
 
 
